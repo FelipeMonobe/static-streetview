@@ -10,8 +10,13 @@ addEventListener('fetch', async (event) => {
     url.search += `&key=${Deno.env.get('key')}`
   
     const signedUrl = sign(url.toString(), Deno.env.get('secret'))
-    const blob = await fetch(signedUrl).then(x => x.blob())
-    const response = new Response(blob, { headers: { 'content-type': 'application/octet-stream' } })
+    const fetchResponse = await fetch(signedUrl)
+    let response = new Response(null, { status: 404 })
+
+    if (fetchResponse.ok) {
+      const blob = await fetchResponse.blob()
+      response = new Response(blob, { headers: { 'content-type': 'application/octet-stream' } })
+    }
 
     event.respondWith(response)
   } else {
@@ -60,12 +65,17 @@ addEventListener('fetch', async (event) => {
             reqUrl.search = new URLSearchParams({
               size: document.querySelector('#size').value,
               location: document.querySelector('#lat').value + ',' + document.querySelector('#lng').value,
-              heading: document.querySelector('#heading').value,
-              pitch: document.querySelector('#pitch').value,
+              heading: document.querySelector('#heading').value, // 0 - 360
+              pitch: document.querySelector('#pitch').value, // 0 - 120
+              outdoor: 'outdoor',
+              return_error_code: true,
             }).toString()
   
             fetch(reqUrl)
-            .then(x => x.blob())
+            .then((x) => {
+              if (x.status !== 200) throw new Error('Error ' + x.status + ' fetching image.')
+              return x.blob()
+            })
             .then(blob => Reflect.set(document.querySelector('img'), 'src', URL.createObjectURL(blob)))
           }
         </script>
