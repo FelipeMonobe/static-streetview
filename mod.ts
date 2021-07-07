@@ -67,7 +67,7 @@ addEventListener('fetch', async (event) => {
               location: document.querySelector('#lat').value + ',' + document.querySelector('#lng').value,
               heading: document.querySelector('#heading').value, // 0 - 360
               pitch: document.querySelector('#pitch').value, // 0 - 120
-              outdoor: 'outdoor',
+              source: 'outdoor',
               return_error_code: true,
             }).toString()
   
