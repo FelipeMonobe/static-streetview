@@ -71,7 +71,7 @@ addEventListener('fetch', async (event) => {
               location: document.querySelector('#lat').value + ',' + document.querySelector('#lng').value,
               heading: document.querySelector('#heading').value,
               pitch: document.querySelector('#pitch').value,
-              fov: 180 / +document.querySelector('#zoom').value ** 2,
+              fov: 180 / Number(document.querySelector('#zoom').value) ** 2,
               source: 'outdoor',
               return_error_code: true,
             }).toString()
