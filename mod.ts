@@ -48,6 +48,10 @@ addEventListener('fetch', async (event) => {
           <label for="pitch">Pitch: </label>
           <input type="text" id="pitch" value="-0.76">
         </div>
+        <div>
+          <label for="zoom">Zoom: </label>
+          <input type="text" id="zoom" value="3.2303450936631393">
+        </div>
         <br>
         <div>
           <button onclick="fetchImgBlob()">
@@ -65,8 +69,9 @@ addEventListener('fetch', async (event) => {
             reqUrl.search = new URLSearchParams({
               size: document.querySelector('#size').value,
               location: document.querySelector('#lat').value + ',' + document.querySelector('#lng').value,
-              heading: document.querySelector('#heading').value, // 0 - 360
-              pitch: document.querySelector('#pitch').value, // 0 - 120
+              heading: document.querySelector('#heading').value,
+              pitch: document.querySelector('#pitch').value,
+              fov: 180 / +document.querySelector('#zoom').value ** 2,
               source: 'outdoor',
               return_error_code: true,
             }).toString()
